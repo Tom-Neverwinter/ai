@@ -64,7 +64,7 @@ RealmID = 1
 #        Example:     "@prefix@/share/trinitycore"
 #        Default:     "."
 
-DataDir = "."
+DataDir = "Data"
 
 #
 #    LogsDir
@@ -90,9 +90,9 @@ LogsDir = ""
 #                     "127.0.0.1;3306;trinity;trinity;world"      - (WorldDatabaseInfo)
 #                     "127.0.0.1;3306;trinity;trinity;characters" - (CharacterDatabaseInfo)
 
-LoginDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;world"
-CharacterDatabaseInfo = "127.0.0.1;3306;trinity;trinity;characters"
+LoginDatabaseInfo     = "127.0.0.1;3310;root;123456;login"
+WorldDatabaseInfo     = "127.0.0.1;3310;root;123456;world"
+CharacterDatabaseInfo = "127.0.0.1;3310;root;123456;characters"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -292,7 +292,7 @@ PlayerSave.Stats.SaveOnlyOnLogout = 1
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-mmap.enablePathFinding = 0
+mmap.enablePathFinding = 1
 
 #
 #    vmap.enableLOS
@@ -2689,7 +2689,7 @@ UI.ShowQuestLevelsInDialogs = 0
 #                         Example:  536870912 (512 mb)
 #
 
-Appender.Console=1,3,0
+Appender.Console=1,1,6,13 11 9 5 3 1
 Appender.Server=2,2,0,Server.log,w
 Appender.GM=2,2,15,gm/gm_%s.log
 Appender.DBErrors=2,2,0,DBErrors.log
