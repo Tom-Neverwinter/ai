@@ -140,6 +140,7 @@ add_dependencies(tests revision.h)
 
 target_link_libraries(tests
   game
+  plugins
   shared
   scripts
   collision
