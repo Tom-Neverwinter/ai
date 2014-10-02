@@ -73,7 +73,7 @@ DataDir = "Data"
 #                     Logs directory must exists, or log file creation will be disabled.
 #        Default:     "" - (Log files will be stored in the current path)
 
-LogsDir = ""
+LogsDir = "Logs"
 
 #
 #    LoginDatabaseInfo
@@ -268,7 +268,7 @@ ChangeWeatherInterval = 600000
 #        Description: Time (in milliseconds) for player save interval.
 #        Default:     900000 - (15 min)
 
-PlayerSaveInterval = 900000
+PlayerSaveInterval = 300000
 
 #
 #    PlayerSave.Stats.MinLevel
