@@ -7,6 +7,7 @@
 #include "AiFactory.h"
 #include "../../game/Maps/MapManager.h"
 #include "PlayerbotCommandServer.h"
+#include "GuildTaskMgr.h"
 
 RandomPlayerbotMgr::RandomPlayerbotMgr() : PlayerbotHolder(), processTicks(0)
 {
@@ -167,6 +168,12 @@ bool RandomPlayerbotMgr::ProcessBot(uint32 bot)
         return false;
     }
 
+    if (player->GetGuild() && player->GetGuild()->GetLeaderGUID() == player->GetGUID())
+    {
+        for (vector<Player*>::iterator i = players.begin(); i != players.end(); ++i)
+            sGuildTaskMgr.Update(*i, player);
+    }
+
     uint32 randomize = GetEventValue(bot, "randomize");
     if (!randomize)
     {
@@ -255,8 +262,27 @@ void RandomPlayerbotMgr::RandomTeleportForLevel(Player* bot)
         "from (select map, position_x, position_y, position_z, avg(t.maxlevel), avg(t.minlevel), "
         "%u - (avg(t.maxlevel) + avg(t.minlevel)) / 2 delta "
         "from creature c inner join creature_template t on c.id = t.entry group by t.entry) q "
-        "where delta >= 0 and delta <= %u and map in (%s)",
-        bot->getLevel(), sPlayerbotAIConfig.randomBotTeleLevel, sPlayerbotAIConfig.randomBotMapsAsString.c_str());
+        "where delta >= 0 and delta <= %u and map in (%s) and not exists ( "
+        "select map, position_x, position_y, position_z from "
+        "("
+        "select map, c.position_x, c.position_y, c.position_z, avg(t.maxlevel), avg(t.minlevel), "
+        "%u - (avg(t.maxlevel) + avg(t.minlevel)) / 2 delta "
+        "from creature c "
+        "inner join creature_template t on c.id = t.entry group by t.entry "
+        ") q1 "
+        "where delta > %u and q1.map = q.map "
+        "and sqrt("
+        "(q1.position_x - q.position_x)*(q1.position_x - q.position_x) +"
+        "(q1.position_y - q.position_y)*(q1.position_y - q.position_y) +"
+        "(q1.position_z - q.position_z)*(q1.position_z - q.position_z)"
+        ") < %u)",
+        bot->getLevel(),
+        sPlayerbotAIConfig.randomBotTeleLevel,
+        sPlayerbotAIConfig.randomBotMapsAsString.c_str(),
+        bot->getLevel(),
+        sPlayerbotAIConfig.randomBotTeleLevel,
+        sPlayerbotAIConfig.sightDistance
+        );
     if (results)
     {
         do
@@ -677,8 +703,10 @@ void RandomPlayerbotMgr::OnPlayerLogin(Player* player)
         }
     }
 
-    if (!player->GetPlayerbotAI())
-        players.push_back(player);
+    if (player->GetPlayerbotAI())
+        return;
+
+    players.push_back(player);
 }
 
 Player* RandomPlayerbotMgr::GetRandomPlayer()
