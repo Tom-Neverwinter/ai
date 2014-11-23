@@ -360,7 +360,10 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         recvPacket.rfinish(); // prevent spam at ignore packet
         return;
     }
-
+	
+	if (sWorld->getBoolConfig(CONFIG_NO_COOLDOWN))
+		_player->RemoveSpellCooldown(spellId, true);
+	
     // Client is resending autoshot cast opcode when other spell is cast during shoot rotation
     // Skip it to prevent "interrupt" message
     if (spellInfo->IsAutoRepeatRangedSpell() && caster->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)
