@@ -28,6 +28,7 @@
 #include "QuestDef.h"
 #include "SpellMgr.h"
 #include "Unit.h"
+#include "World.h"
 #include "../../scripts/Custom/Transmog/Transmogrification.h"
 
 #include <limits>
@@ -2372,6 +2373,17 @@ class Player : public Unit, public GridObject<Player>
         std::string GetMapAreaAndZoneString();
         std::string GetCoordsMapAreaAndZoneString();
 
+		uint8 getLevel() const { return m_realLevel; }
+		uint8 getRealLevel() const { return m_realLevel; }
+		uint8 getAdaptiveLevel() const
+			{
+			if (sWorld->getBoolConfig(CONFIG_ADAPTIVE_LEVEL))
+				return m_adaptiveLevel;
+			else
+				return m_realLevel;
+			}
+		void GiveAdaptiveLevel(uint8 level);
+
         TransmogMapType transmogMap; // transmogMap[iGUID] = entry
 #ifdef PRESETS
         PresetMapType presetMap; // presetMap[presetId] = presetData
@@ -2709,6 +2721,8 @@ class Player : public Unit, public GridObject<Player>
         uint32 _pendingBindTimer;
 
         uint32 _activeCheats;
+
+		uint8 m_realLevel, m_adaptiveLevel;
 
         // Playerbot mod:
         PlayerbotAI* m_playerbotAI;
