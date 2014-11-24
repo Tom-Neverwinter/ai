@@ -1132,6 +1132,7 @@ void World::LoadConfigSettings(bool reload)
 	m_float_configs[CONFIG_MINRATE_DROP_ITEM_EPIC] = sConfigMgr->GetFloatDefault("Custom.MinimumRate.Drop.Item.Epic", 1);
 	m_float_configs[CONFIG_MINRATE_DROP_ITEM_LEGEND] = sConfigMgr->GetFloatDefault("Custom.MinimumRate.Drop.Item.Legendary", 1);
 	m_float_configs[CONFIG_MINRATE_DROP_ITEM_ART] = sConfigMgr->GetFloatDefault("Custom.MinimumRate.Drop.Item.Artifact", 1);
+	m_int_configs[CONFIG_QUEST_AUTOCOMPLETE_DELAY] = sConfigMgr->GetIntDefault("Custom.AutoCompleteQuestDelay", 0);
 
     ///- Load the CharDelete related config options
     m_int_configs[CONFIG_CHARDELETE_METHOD] = sConfigMgr->GetIntDefault("CharDelete.Method", 0);
