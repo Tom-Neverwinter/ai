@@ -3481,15 +3481,15 @@ Custom.FastFishing = 0
 # Default : 0 (No honor when you kill a guard/elite mob)
 #
 
-Custom.GainHonorOnGuardKill = 0
-Custom.GainHonorOnEliteKill = 0
+Custom.GainHonorOnGuardKill = 1
+Custom.GainHonorOnEliteKill = 1
 
 # Custom.NoGreyAggro
 # Set it to 1 to disable the aggro of grey (low level) creatures
 # Default : 0 (Aggro Enable)
 #
 
-Custom.NoGreyAggro = 0
+Custom.NoGreyAggro = 1
 
 # Custom.RespawnSpeed
 # Set it to a number upper than 1 to speed up the respawn of mobs (and lower than 1 to slow down).
