@@ -3481,15 +3481,15 @@ Custom.FastFishing = 0
 # Default : 0 (No honor when you kill a guard/elite mob)
 #
 
-Custom.GainHonorOnGuardKill = 1
-Custom.GainHonorOnEliteKill = 1
+Custom.GainHonorOnGuardKill = 0
+Custom.GainHonorOnEliteKill = 0
 
 # Custom.NoGreyAggro
 # Set it to 1 to disable the aggro of grey (low level) creatures
 # Default : 0 (Aggro Enable)
 #
 
-Custom.NoGreyAggro = 1
+Custom.NoGreyAggro = 0
 
 # Custom.RespawnSpeed
 # Set it to a number upper than 1 to speed up the respawn of mobs (and lower than 1 to slow down).
@@ -3498,27 +3498,7 @@ Custom.NoGreyAggro = 1
 
 Custom.RespawnSpeed = 1.0
 
-# Custom.LootOnlyForPlayer
-# Set it to 1 to enable only certain item to be looted:
-# - only equipment the player can be wear will be looted
-# - only recipes for a profession the player has will be looted
-# - only recipes the player does not already know will be looted
-# Default : 0 (all items are looted)
 #
-
-Custom.LootOnlyForPlayer = 1
-
-# Custom.MinimumRate.Drop.Item
-# Set it to a number to set the minimum drop rates for items of the corresponding quality
-# If set to 0, the default drop rate will be applied.
-# Default : 0 (default drop rate)
-#
-
-Custom.MinimumRate.Drop.Item.Uncommon = 0
-Custom.MinimumRate.Drop.Item.Rare = 0
-Custom.MinimumRate.Drop.Item.Epic = 0
-Custom.MinimumRate.Drop.Item.Legendary = 0
-Custom.MinimumRate.Drop.Item.Artifact = 0
 
 # Custom.AutoCompleteQuestDelay
 # Set it to a number to enable the summon of the quest giver of the quest you just completed.
