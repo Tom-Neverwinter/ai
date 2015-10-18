@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2014 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2015 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -218,7 +218,7 @@ class Group
         ObjectGuid GetMasterLooterGuid() const;
         ItemQualities GetLootThreshold() const;
 
-        uint32 GetDbStoreId() const { return m_dbStoreId; };
+        uint32 GetDbStoreId() const { return m_dbStoreId; }
 
         // member manipulation methods
         bool IsMember(ObjectGuid guid) const;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2014 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2015 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -63,6 +63,7 @@ class Corpse : public WorldObject, public GridObject<Corpse>
 
         void DeleteBonesFromWorld();
         void DeleteFromDB(SQLTransaction& trans);
+        static void DeleteFromDB(ObjectGuid const& ownerGuid, SQLTransaction& trans);
 
         ObjectGuid GetOwnerGUID() const { return GetGuidValue(CORPSE_FIELD_OWNER); }
 

@@ -17,4 +17,4 @@ CMakeLists.txt.user
 *.BASE.*
 *.LOCAL.*
 /cmake/
-/contrib/world_updates.sql
+nbproject/*
