@@ -107,7 +107,7 @@ PlayerbotAI::PlayerbotAI(Player* bot) :
     botOutgoingPacketHandlers.AddHandler(SMSG_PARTY_COMMAND_RESULT, "party command");
     botOutgoingPacketHandlers.AddHandler(SMSG_CAST_FAILED, "cast failed");
     botOutgoingPacketHandlers.AddHandler(SMSG_DUEL_REQUESTED, "duel requested");
-    botOutgoingPacketHandlers.AddHandler(SMSG_LFG_ROLE_CHECK_UPDATE, "lfg role check");
+    botOutgoingPacketHandlers.AddHandler(SMSG_LFG_ROLE_CHOSEN, "lfg role check");
     botOutgoingPacketHandlers.AddHandler(SMSG_LFG_PROPOSAL_UPDATE, "lfg proposal");
 
     masterOutgoingPacketHandlers.AddHandler(SMSG_PARTY_COMMAND_RESULT, "party command");
@@ -1351,7 +1351,23 @@ string PlayerbotAI::HandleRemoteCommand(string command)
     }
     else if (command == "position")
     {
-        ostringstream out; out << bot->GetMapId() << "," << bot->GetPositionX() << "," << bot->GetPositionY() << "," << bot->GetPositionZ() << "," << bot->GetOrientation();
+        ostringstream out; out << bot->GetPositionX() << " " << bot->GetPositionY() << " " << bot->GetPositionZ() << " " << bot->GetMapId() << " " << bot->GetOrientation();
+        return out.str();
+    }
+    else if (command == "tpos")
+    {
+        Unit* target = *GetAiObjectContext()->GetValue<Unit*>("current target");
+        if (!target) {
+            return "";
+        }
+
+        ostringstream out; out << target->GetPositionX() << " " << target->GetPositionY() << " " << target->GetPositionZ() << " " << target->GetMapId() << " " << target->GetOrientation();
+        return out.str();
+    }
+    else if (command == "movement")
+    {
+        LastMovement& data = *GetAiObjectContext()->GetValue<LastMovement&>("last movement");
+        ostringstream out; out << data.lastMoveToX << " " << data.lastMoveToY << " " << data.lastMoveToZ << " " << bot->GetMapId() << " " << data.lastMoveToOri;
         return out.str();
     }
     else if (command == "target")
@@ -1384,6 +1400,10 @@ string PlayerbotAI::HandleRemoteCommand(string command)
     else if (command == "action")
     {
         return currentEngine->GetLastAction();
+    }
+    else if (command == "values")
+    {
+        return GetAiObjectContext()->FormatValues();
     }
     ostringstream out; out << "invalid command: " << command;
     return out.str();

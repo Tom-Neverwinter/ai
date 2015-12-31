@@ -19,16 +19,24 @@ bool SpellCastUsefulValue::Calculate()
 		spellInfo->Attributes & SPELL_ATTR0_ON_NEXT_SWING_2)
 	{
 		Spell* spell = bot->GetCurrentSpell(CURRENT_MELEE_SPELL);
-		if (spell && spell->m_spellInfo->Id == spellid && spell->IsNextMeleeSwingSpell())
+		if (spell && spell->m_spellInfo->Id == spellid && spell->IsNextMeleeSwingSpell() && bot->HasUnitState(UNIT_STATE_MELEE_ATTACKING))
 			return false;
 	}
+	else
+	{
+        uint32 lastSpellId = AI_VALUE(LastSpellCast&, "last spell cast").id;
+        if (spellid == lastSpellId)
+        {
+            Spell* const pSpell = bot->FindCurrentSpellBySpellId(lastSpellId);
+            if (pSpell)
+                return false;
+        }
+	}
 
-    uint32 lastSpellId = AI_VALUE(LastSpellCast&, "last spell cast").id;
-    if (spellid == lastSpellId)
+    if (spellInfo->IsAutoRepeatRangedSpell() && bot->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL) &&
+            bot->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)->m_spellInfo->Id == spellid)
     {
-        Spell* const pSpell = bot->FindCurrentSpellBySpellId(lastSpellId);
-        if (pSpell)
-            return false;
+        return false;
     }
 
     // TODO: workaround

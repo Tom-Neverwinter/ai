@@ -24,7 +24,7 @@ bool MovementAction::MoveNear(WorldObject* target, float distance)
     distance += target->GetObjectSize() / 2.0f;
 
     float followAngle = GetFollowAngle();
-    for (float angle = followAngle - M_PI; angle <= followAngle + M_PI; angle += M_PI / 4)
+    for (float angle = followAngle; angle <= followAngle + 2 * M_PI; angle += M_PI / 4)
     {
         bool moved = MoveTo(target->GetMapId(),
             target->GetPositionX() + cos(angle) * distance,
@@ -42,7 +42,7 @@ bool MovementAction::MoveTo(uint32 mapId, float x, float y, float z)
     if (!IsMovingAllowed(mapId, x, y, z))
         return false;
 
-    float distance = bot->GetDistance(x, y, z);
+    float distance = bot->GetDistance2d(x, y);
     if (distance > sPlayerbotAIConfig.contactDistance)
     {
         WaitForReach(distance);
@@ -69,10 +69,12 @@ bool MovementAction::MoveTo(uint32 mapId, float x, float y, float z)
         }
         else
             mm.MovePoint(mapId, x, y, z, generatePath);
+
+        AI_VALUE(LastMovement&, "last movement").Set(x, y, z, bot->GetOrientation());
+        return true;
     }
 
-    AI_VALUE(LastMovement&, "last movement").Set(x, y, z, bot->GetOrientation());
-    return true;
+    return false;
 }
 
 bool MovementAction::MoveTo(Unit* target, float distance)
@@ -88,7 +90,7 @@ bool MovementAction::MoveTo(Unit* target, float distance)
     float ty = target->GetPositionY();
     float tz = target->GetPositionZ();
 
-    float distanceToTarget = bot->GetDistance(target);
+    float distanceToTarget = bot->GetDistance2d(target);
     float angle = bot->GetAngle(target);
     float needToGo = distanceToTarget - distance;
 
@@ -246,7 +248,7 @@ bool MovementAction::Flee(Unit *target)
     if (!IsMovingAllowed())
         return false;
 
-    FleeManager manager(bot, sPlayerbotAIConfig.fleeDistance, GetFollowAngle());
+    FleeManager manager(bot, sPlayerbotAIConfig.fleeDistance, bot->GetAngle(target) + M_PI);
 
     float rx, ry, rz;
     if (!manager.CalculateDestination(&rx, &ry, &rz))
@@ -263,7 +265,8 @@ bool FleeAction::Execute(Event event)
 bool FleeAction::isUseful()
 {
     return AI_VALUE(uint8, "attacker count") > 0 &&
-            AI_VALUE2(float, "distance", "current target") <= sPlayerbotAIConfig.tooCloseDistance;
+            AI_VALUE2(float, "distance", "current target") <= sPlayerbotAIConfig.tooCloseDistance &&
+            AI_VALUE2(uint8, "speed", "current target") < 100;
 }
 
 bool RunAwayAction::Execute(Event event)
@@ -353,7 +356,7 @@ bool MoveOutOfEnemyContactAction::Execute(Event event)
 
 bool MoveOutOfEnemyContactAction::isUseful()
 {
-    return AI_VALUE2(float, "distance", "current target") <= sPlayerbotAIConfig.contactDistance;
+    return AI_VALUE2(float, "distance", "current target") < (sPlayerbotAIConfig.meleeDistance + sPlayerbotAIConfig.contactDistance);
 }
 
 bool SetFacingTargetAction::Execute(Event event)

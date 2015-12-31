@@ -20,6 +20,8 @@ class BearTankDruidTestCase : public EngineTestBase
         CPPUNIT_TEST( aoe );
         CPPUNIT_TEST( incompatibles );
         CPPUNIT_TEST( interrupt_enemy_healer );
+        CPPUNIT_TEST( stress );
+        CPPUNIT_TEST( say );
     CPPUNIT_TEST_SUITE_END();
 
 
@@ -91,8 +93,9 @@ protected:
 		tickWithSpellAvailable("lacerate");
 		tickWithSpellAvailable("lacerate");
 		tickWithSpellAvailable("lacerate");
+		tickWithSpellAvailable("lacerate");
 
-        assertActions(">T:lacerate>T:mangle (bear)>T:maul>T:feral charge - bear>T:faerie fire (feral)>T:lacerate>T:lacerate>T:melee>T:faerie fire (feral)>T:lacerate>T:mangle (bear)>T:maul>T:lacerate");
+        assertActions(">T:lacerate>T:mangle (bear)>T:maul>T:feral charge - bear>T:faerie fire (feral)>T:melee>T:lacerate>T:melee>T:faerie fire (feral)>T:lacerate>T:mangle (bear)>T:maul>T:melee>T:lacerate");
     }
 
     void healHimself()
@@ -210,6 +213,23 @@ protected:
         tickWithEnemyHealerIsCastingInterruptableSpell("bash");
         assertActions(">H:bash on enemy healer");
     }
+
+    void stress()
+    {
+        addAura("dire bear form");
+        runStressTest();
+    }
+
+    void say()
+    {
+        addAura("dire bear form");
+        engine->addStrategy("say");
+        set<Unit*>("tank target", MockedTargets::GetCurrentTarget());
+        tickWithLowHealth(5);
+
+        assertActions(">S:say::critical health");
+    }
+
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( BearTankDruidTestCase );
