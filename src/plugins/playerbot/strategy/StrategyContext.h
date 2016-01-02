@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CustomStrategy.h"
 #include "generic/NonCombatStrategy.h"
 #include "generic/RacialsStrategy.h"
 #include "generic/ChatCommandHandlerStrategy.h"
@@ -31,7 +32,6 @@
 #include "generic/TellTargetStrategy.h"
 #include "generic/AttackEnemyPlayersStrategy.h"
 #include "generic/MoveRandomStrategy.h"
-#include "generic/SayStrategy.h"
 
 namespace ai
 {
@@ -61,7 +61,7 @@ namespace ai
             creators["pvp"] = &StrategyContext::pvp;
             creators["move random"] = &StrategyContext::move_random;
             creators["lfg"] = &StrategyContext::lfg;
-            creators["say"] = &StrategyContext::say;
+            creators["custom"] = &StrategyContext::custom;
         }
 
     private:
@@ -86,7 +86,7 @@ namespace ai
         static Strategy* pvp(PlayerbotAI* ai) { return new AttackEnemyPlayersStrategy(ai); }
         static Strategy* move_random(PlayerbotAI* ai) { return new MoveRandomStrategy(ai); }
         static Strategy* lfg(PlayerbotAI* ai) { return new LfgStrategy(ai); }
-        static Strategy* say(PlayerbotAI* ai) { return new SayStrategy(ai); }
+        static Strategy* custom(PlayerbotAI* ai) { return new CustomStrategy(ai); }
     };
 
     class MovementStrategyContext : public NamedObjectContext<Strategy>
